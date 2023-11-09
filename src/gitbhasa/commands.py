@@ -76,8 +76,8 @@ def setup(api_key, model):
     current['default_key'] = api_key
     path.write_text(json.dumps(current, indent=2) + "\n")
 
-    os.environ['OPENAI_API_KEY'] = api_key
-    print(os.environ['OPENAI_API_KEY'])
+    # os.environ['OPENAI_API_KEY'] = api_key
+    # print(os.environ['OPENAI_API_KEY'])
 
 
 @click.command()
