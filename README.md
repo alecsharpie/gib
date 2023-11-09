@@ -22,7 +22,6 @@ Make sure the main script is executable:
 bash
 ```
 chmod +x bin/gib
-
 ```
 
 You might want to add the bin directory to your PATH in your .bashrc or .zshrc to run the script from anywhere:

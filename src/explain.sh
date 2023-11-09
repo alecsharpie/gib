@@ -12,6 +12,12 @@ if ! command -v git &>/dev/null; then
   exit 1
 fi
 
+# Check if jq is installed
+if ! command -v jq &>/dev/null; then
+  echo "jq is not installed. Please install jq and try again."
+  exit 1
+fi
+
 # Use git to get the last diff
 DIFF=$(git diff)
 
@@ -21,21 +27,26 @@ if [[ -z "${DIFF}" ]]; then
   exit 0
 fi
 
+# Escape the diff output for JSON
+ESCAPED_DIFF=$(jq -aRs . <<< "${DIFF}")
+
 # Prepare the data for the API request
-read -r -d '' DATA << EOF
-{
-  "model": "text-davinci-003",
-  "prompt": "Explain the following code changes:\n\n${DIFF}\n\n",
-  "temperature": 0,
-  "max_tokens": 150
-}
-EOF
+JSON_DATA=$(jq -n \
+  --arg model "gpt-3.5-turbo" \
+  --arg diff "$ESCAPED_DIFF" \
+  '{
+    "model": $model,
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": ("Please summarize the following git diff:\n\n" + ($diff | rtrimstr("\n")))}
+    ]
+  }')
 
 # Make the request to the OpenAI API
-RESPONSE=$(curl -s -X POST "https://api.openai.com/v1/completions" \
+RESPONSE=$(curl -s -X POST "https://api.openai.com/v1/chat/completions" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OPENAI_API_KEY}" \
-  -d "${DATA}")
+  -d "$JSON_DATA")
 
 # Check if the request was successful
 if [[ "$(echo "$RESPONSE" | jq -r '.error.message')" != "null" ]]; then
@@ -46,4 +57,4 @@ fi
 
 # Output the explanation
 echo "Here's the explanation from OpenAI:"
-echo "$RESPONSE" | jq -r '.choices[0].text'
+echo "$RESPONSE" | jq -r '.choices[0].message.content'
