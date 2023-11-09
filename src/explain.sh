@@ -38,7 +38,7 @@ JSON_DATA=$(jq -n \
     "model": $model,
     "messages": [
       {"role": "system", "content": "You are a helpful assistant."},
-      {"role": "user", "content": ("Please summarize the following git diff:\n\n" + ($diff | rtrimstr("\n")))}
+      {"role": "user", "content": ("Please summarize the following git diff.\nBe concise and holistic. Keep it very short. Do not provide any external commentary.\n\n" + ($diff | rtrimstr("\n")))}
     ]
   }')
 
@@ -56,5 +56,4 @@ if [[ "$(echo "$RESPONSE" | jq -r '.error.message')" != "null" ]]; then
 fi
 
 # Output the explanation
-echo "Here's the explanation from OpenAI:"
 echo "$RESPONSE" | jq -r '.choices[0].message.content'
