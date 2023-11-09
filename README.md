@@ -1,23 +1,18 @@
 # Gitbhasa
 
-LLM Setup
+## LLM Setup
+Run these or add them to your .bashrc, .zshrc, etc
 ```
-# Add this line to your .bashrc, .zshrc, or equivalent
 export OPENAI_API_KEY='your_openai_api_key_here'
-export OPENAI_MODEL='your_openai_model_here'
+export OPENAI_MODEL='your_openai_model_here' # gpt-4, gpt-3.5-turbo
 ```
 
-```
-```
-
-Requirements
-jq
-https://jqlang.github.io/jq/download/
-git
-https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+## Requirements
+- jq: [jqlang.github.io/jq/download/](https://jqlang.github.io/jq/download/)
+- git: [git-scm.com/book/en/v2/Getting-Started-Installing-Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 
-Permission and Installation
+## Permission and Installation
 Make sure the main script is executable:
 bash
 ```
