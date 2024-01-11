@@ -2,3 +2,30 @@
 .env
 *.gguf
 llama.cpp/
+
+
+# Byte-compiled files
+**/__pycache__/**
+*.py[cod]
+
+# Packages
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# IDE settings
+.idea/
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# OS generated files
+**/.DS_Store
+Thumbs.db
