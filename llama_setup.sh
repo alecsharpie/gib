@@ -31,7 +31,7 @@ main() {
 
     cd llama.cpp
 
-    make
+    make > build.log 2>&1 && echo "llama build succeeded" || { echo "llama build failed"; exit 1; }
 
     download_model
 
