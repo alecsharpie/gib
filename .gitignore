@@ -1,5 +1,6 @@
 # Llama cpp
 *.gguf
+model/
 llama.cpp/
 main.log
 
@@ -18,6 +19,7 @@ build/
 .venv
 env/
 venv/
+.python-version
 
 # IDE settings
 .idea/
