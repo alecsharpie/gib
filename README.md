@@ -27,9 +27,11 @@ gib --help
 
 git add .
 gib commit -v
-```
+
+> output
+Fetching recent changes...
+Generating diff summary...
 Diff Summary:
-```
 - Project name changed from "gitbhasa" to "gib".
 - Updated the Python version requirement to be ">=3.8.0".
 - Replaced the dependency "llama-cpp-python" with "openai".
@@ -38,9 +40,8 @@ Diff Summary:
 - Added an optional dependency "llama-cpp-python".
 - Added new CLI commands for "developer_summary", "commit", and "explain_changes".
 - Added new Python files for handling Git operations, LLM responses, local LLM functionality, and utilities.
-```
-Generated Commit Message:
-```
-git commit -m "Changed project name, updated Python version requirement, replaced dependency, updated project homepage link, modified console script entry point, added optional dependency, introduced new CLI commands, included new Python files."
+Generating commit message...
+Suggested commit message:
+git commit -m **"Changed project name, updated Python version requirement, replaced dependency, updated project homepage link, modified console script entry point, added optional dependency, introduced new CLI commands, included new Python files."**
 Do you want to proceed with this commit message? [y]es, [n]o, [e]dit: n
 ```
