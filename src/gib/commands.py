@@ -10,7 +10,7 @@ from gib.git import run_git_command
 from gib.utils import get_config
 
 
-@click.group()
+@click.group(context_settings={"help_option_names": ['-h', '--help']})
 def cli():
     pass
 
