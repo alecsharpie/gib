@@ -10,7 +10,7 @@
 
 ## Installation
 ```
-git clone www.github.com/alecsharpie/gib.git
+git clone https://github.com/alecsharpie/gib.git
 pip install .
 ```
 
@@ -24,7 +24,10 @@ In theory there are many models this could use. The current implementation uses 
 ## Example Usage
 ```
 gib --help
+```
 
+### Generating Commit Messages
+```
 git add .
 gib commit -v
 
