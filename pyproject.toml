@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gitbhasa"
+name = "gib"
 version = "0.1"
 authors = [
   { name="Alec Sharp", email="alecsharpie@gmail.com" },
 ]
 description = "A CLI tool for git workflows using LLMs"
 readme = "README.md"
-requires-python = ">=3.10.9"
+requires-python = ">=3.8.0"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -18,11 +18,14 @@ classifiers = [
 ]
 dependencies = [
     "click",
-    "llama-cpp-python"
+    "openai"
 ]
 
+[project.optional-dependencies]
+local = ["llama-cpp-python"]
+
 [project.urls]
-"Homepage" = "https://github.com/alecsharpie/gitbhasa"
+"Homepage" = "https://github.com/alecsharpie/gib"
 
 [project.scripts]
-gib = "gitbhasa.commands:cli"
+gib = "gib.commands:cli"
