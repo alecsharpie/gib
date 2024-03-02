@@ -1,4 +1,4 @@
-# Gitbhasa
+# gib
 
 ## Requirements
 - jq: [jqlang.github.io/jq/download/](https://jqlang.github.io/jq/download/)
