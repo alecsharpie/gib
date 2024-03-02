@@ -1,5 +1,6 @@
 # Llama cpp
 *.gguf
+model/
 llama.cpp/
 main.log
 
@@ -18,6 +19,7 @@ build/
 .venv
 env/
 venv/
+.python-version
 
 # IDE settings
 .idea/
@@ -29,3 +31,6 @@ venv/
 # OS generated files
 **/.DS_Store
 Thumbs.db
+
+#Config
+config.json
