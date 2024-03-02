@@ -7,12 +7,6 @@ def check_gh_auth():
     return "Logged in to github.com" in output
 
 
-# def run_git_command(command):
-#     result = subprocess.run(command, stdout=subprocess.PIPE)
-#     output = result.stdout.decode('utf-8')
-#     return '\n'.join(output.split('\n')[:200])
-
-
 def run_git_command(command, verbose=False):
     result = subprocess.run(
         command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
