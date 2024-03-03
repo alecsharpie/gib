@@ -3,17 +3,22 @@ from openai import OpenAI
 from gib.utils import get_config
 
 
-def get_llm_response(prompt, is_stream=False):
-    if get_config()["model_name"] in ["gpt-3.5-turbo", "gpt-4"]:
+def get_llm_response(ctx, prompt, is_stream=False):
+    if ctx.model_name in ["gpt-3.5-turbo", "gpt-4"]:
         client = OpenAI()
         response = client.chat.completions.create(
-            model=get_config()["model_name"],
+            model=ctx.model_name,
             messages=[
                 {
-                    "role": "system",
-                    "content": "You are an experienced software engineer taking an exam to earn a certificate at the end of a professional development course. You are feeling focused and confident. Please complete the following tasks. The language you use should be concise and clear. The audience grading you are technical. Your response should contain only the answer to the task, no additional commentary.",
+                    "role":
+                    "system",
+                    "content":
+                    "You are an experienced software engineer taking an exam to earn a certificate at the end of a professional development course. You are feeling focused and confident. Please complete the following tasks. The language you use should be concise and clear. The audience grading you are technical. Your response should contain only the answer to the task, no additional commentary.",
                 },
-                {"role": "user", "content": prompt},
+                {
+                    "role": "user",
+                    "content": prompt
+                },
             ],
             stream=is_stream,
         )
@@ -25,9 +30,9 @@ def get_llm_response(prompt, is_stream=False):
                 print(chunk.choices[0].delta.content or "", end="")
 
 
-def summarise_changes(diff, is_stream=False):
+def summarise_changes(ctx, diff, is_stream=False):
 
-    diff_summary = get_llm_response(
+    diff_summary = get_llm_response(ctx,
     f"""Here is the output of running `git diff`:
 ```
 {diff}
@@ -40,7 +45,7 @@ Please write a bullet point list concisely summarizing the changes made here. Th
     return diff_summary
 
 
-def summary_to_commit_message(summary, is_stream=False):
+def summary_to_commit_message(ctx, summary, is_stream=False):
     diff_commit_message = get_llm_response(
     f"""Here is a bullet point list containing a summary of the output of running git diff:
 ```

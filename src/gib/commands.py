@@ -13,14 +13,16 @@ from gib.git import run_command
 from gib.utils import get_config
 
 
-@click.group(context_settings={"help_option_names": ['-h', '--help']})
-def cli():
-    pass
+@click.group(context_settings={"help_option_names": ['-h', '--help']}, chain=True)
+@click.pass_context
+def cli(ctx) -> None:
+    ctx.obj = get_config()
 
 
 @click.command()
-def get():
-    pprint(get_config())
+@click.pass_context
+def get(ctx):
+    click.echo(f'{ctx.obj}')
 
 
 @click.command()
@@ -30,8 +32,16 @@ def get():
     default="gpt-3.5-turbo",
     help="The model to use: gpt-4, gpt-3.5-turbo, etc...",
 )
-def set(model):
-    config = {"model_name": model}
+@click.option(
+    "-v",
+    "--verbose",
+    is_flag=True,
+    default=False,
+    help="Logs intermediate LLM calls. E.g Chain of thought",
+)
+def set(model, verbose):
+    config = {"model_name": model,
+              "verbose": verbose}
     config_path = os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "config.json"
     )
