@@ -1,4 +1,4 @@
-<h1 align="center" style="font-family: 'Trebuchet MS' sans-serif;">gib</h1>
+<h1 align="center" style="color:red">gib</h1>
 
 <p align="center">LLM's for Git - Streamlining Your Version Control</p>
 
