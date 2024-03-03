@@ -107,8 +107,7 @@ def commit(ctx, verbose):
     click.echo(f'git commit -m "{diff_commit_message}"')
 
     user_choice = click.prompt(
-        "Do you want to proceed with this commit message? [y]es, [n]o, [e]dit", type=str
-    )
+        "Proceed with commit message? [y]es, [n]o, [e]dit", type=str)
 
     if user_choice.lower() == "y":
         run_command(["git", "commit", "-m", diff_commit_message], verbose=True)
