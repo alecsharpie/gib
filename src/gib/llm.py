@@ -4,10 +4,10 @@ from gib.utils import get_config
 
 
 def get_llm_response(ctx, prompt, is_stream=False):
-    if ctx.model_name in ["gpt-3.5-turbo", "gpt-4"]:
+    if ctx.obj['model_name'] in ["gpt-3.5-turbo", "gpt-4"]:
         client = OpenAI()
         response = client.chat.completions.create(
-            model=ctx.model_name,
+            model=ctx.obj['model_name'],
             messages=[
                 {
                     "role":
@@ -33,7 +33,8 @@ def get_llm_response(ctx, prompt, is_stream=False):
 def summarise_changes(ctx, diff, is_stream=False):
 
     diff_summary = get_llm_response(ctx,
-    f"""Here is the output of running `git diff`:
+    f"""Task 1:
+Here is the output of running `git diff`:
 ```
 {diff}
 ```
@@ -46,8 +47,9 @@ Please write a bullet point list concisely summarizing the changes made here. Th
 
 
 def summary_to_commit_message(ctx, summary, is_stream=False):
-    diff_commit_message = get_llm_response(
-    f"""Here is a bullet point list containing a summary of the output of running git diff:
+    diff_commit_message = get_llm_response(ctx,
+    f"""Task 1:
+Here is a bullet point list containing a summary of the output of running git diff:
 ```
 {summary}
 ```

@@ -13,7 +13,7 @@ from gib.git import run_command
 from gib.utils import get_config
 
 
-@click.group(context_settings={"help_option_names": ['-h', '--help']}, chain=True)
+@click.group(context_settings={"help_option_names": ['-h', '--help']})
 @click.pass_context
 def cli(ctx) -> None:
     ctx.obj = get_config()
@@ -22,8 +22,7 @@ def cli(ctx) -> None:
 @click.command()
 @click.pass_context
 def get(ctx):
-    click.echo(f'{ctx.obj}')
-
+    click.echo(f"{ctx.obj}")
 
 @click.command()
 @click.option(
@@ -51,7 +50,8 @@ def set(model, verbose):
 
 
 @click.command()
-def important_commit():
+@click.pass_context
+def important_commit(ctx):
     recent_commits = run_command(["git", "log", "--pretty=format:%s"]).stdout
     response = get_llm_response(
         f"Of the most recent 5 commits, which is probably the most important?\n{recent_commits}"
@@ -60,7 +60,8 @@ def important_commit():
 
 
 @click.command()
-def developer_summary():
+@click.pass_context
+def developer_summary(ctx):
     recent_commits = run_command(
         ["git", "log", '--pretty=format:"Author: %an <%ae>%n%n    %s%n"']
     ).stdout
@@ -71,7 +72,8 @@ def developer_summary():
 
 
 @click.command()
-def explain_changes():
+@click.pass_context
+def explain_changes(ctx):
     recent_changes = run_command(["git", "log", "--pretty=format:%s", "-n", "5"]).stdout
     response = get_llm_response(
         f"These changes are the result of running git log:\n```\n{recent_changes}\n```\n\nPlease write a PR message that explains the changes.\n"
@@ -87,19 +89,20 @@ def explain_changes():
     default=False,
     help="Prints the chain of thought used to arrive at the final response",
 )
-def commit(verbose):
-    if verbose:
+@click.pass_context
+def commit(ctx, verbose):
+    if ctx.obj['verbose'] or verbose:
         click.secho("Fetching & Summarising recent changes...", fg="green")
     diff = run_command(["git", "diff", "--staged"]).stdout
     if diff == "":
         click.secho("No staged changes.", fg="red")
         return
-    diff_summary = summarise_changes(diff)
-    if verbose:
+    diff_summary = summarise_changes(ctx, diff)
+    if ctx.obj['verbose'] or verbose:
         click.secho("Diff Summary:", fg="yellow")
         click.echo(diff_summary)
         click.secho("Generating commit message...", fg="green")
-    diff_commit_message = summary_to_commit_message(diff_summary)
+    diff_commit_message = summary_to_commit_message(ctx, diff_summary)
     click.secho("Suggested commit message:", fg="yellow")
     click.echo(f'git commit -m "{diff_commit_message}"')
 
