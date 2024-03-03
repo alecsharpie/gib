@@ -6,7 +6,10 @@ import json
 from pprint import pprint
 
 from gib.llm import get_llm_response
-from gib.git import run_git_command
+from gib.llm import summarise_changes
+from gib.llm import summary_to_commit_message
+
+from gib.git import run_command
 from gib.utils import get_config
 
 
@@ -39,7 +42,7 @@ def set(model):
 
 @click.command()
 def important_commit():
-    recent_commits = run_git_command(["git", "log", "--pretty=format:%s"])
+    recent_commits = run_command(["git", "log", "--pretty=format:%s"]).stdout
     response = get_llm_response(
         f"Of the most recent 5 commits, which is probably the most important?\n{recent_commits}"
     )
@@ -48,9 +51,9 @@ def important_commit():
 
 @click.command()
 def developer_summary():
-    recent_commits = run_git_command(
+    recent_commits = run_command(
         ["git", "log", '--pretty=format:"Author: %an <%ae>%n%n    %s%n"']
-    )
+    ).stdout
     response = get_llm_response(
         f"Who has created which features and when?\n{recent_commits}"
     )
@@ -59,7 +62,7 @@ def developer_summary():
 
 @click.command()
 def explain_changes():
-    recent_changes = run_git_command(["git", "log", "--pretty=format:%s", "-n", "5"])
+    recent_changes = run_command(["git", "log", "--pretty=format:%s", "-n", "5"]).stdout
     response = get_llm_response(
         f"These changes are the result of running git log:\n```\n{recent_changes}\n```\n\nPlease write a PR message that explains the changes.\n"
     )
@@ -76,31 +79,17 @@ def explain_changes():
 )
 def commit(verbose):
     if verbose:
-        click.secho("Fetching recent changes...", fg="green")
-    diff = run_git_command(["git", "diff", "--staged"])
-    if verbose:
-        click.secho("Generating diff summary...", fg="green")
-    diff_summary = get_llm_response(
-        f"""Here is the output of running `git diff`:
-        ```
-        {diff}
-        ```
-
-        Please write a bullet point list concisely summarizing the changes made here. Think holistically about the changes and how they fit together. Directly reference variables and files by name, be specific.""",
-        is_stream=False,
-    )
+        click.secho("Fetching & Summarising recent changes...", fg="green")
+    diff = run_command(["git", "diff", "--staged"]).stdout
+    if diff == "":
+        click.secho("No staged changes.", fg="red")
+        return
+    diff_summary = summarise_changes(diff)
     if verbose:
         click.secho("Diff Summary:", fg="yellow")
         click.echo(diff_summary)
         click.secho("Generating commit message...", fg="green")
-    diff_commit_message = get_llm_response(
-        f"""Here is a bullet point list containing a summary of the output of running git diff:
-        ```
-        {diff_summary}
-        ```
-
-        Please write a commit message that describes the change(s). It should be 1 to 5 short statements separated by commas. Think holistically about the changes. E.g 'Added foo feature, Updated Python version requirement"""
-    )
+    diff_commit_message = summary_to_commit_message(diff_summary)
     click.secho("Suggested commit message:", fg="yellow")
     click.echo(f'git commit -m "{diff_commit_message}"')
 
@@ -109,13 +98,13 @@ def commit(verbose):
     )
 
     if user_choice.lower() == "y":
-        run_git_command(["git", "commit", "-m", diff_commit_message], verbose=True)
+        run_command(["git", "commit", "-m", diff_commit_message], verbose=True)
 
     elif user_choice.lower() == "e":
         new_message = click.prompt(
             "Please enter the new commit message", type=str, default=diff_commit_message
         )
-        run_git_command(["git", "commit", "-m", new_message], verbose=True)
+        run_command(["git", "commit", "-m", new_message], verbose=True)
 
     else:
         click.secho("Commit cancelled.", fg="red")

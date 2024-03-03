@@ -1,5 +1,6 @@
 import os
 import json
+import subprocess
 
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.json")
 
@@ -18,3 +19,13 @@ def set_config(model):
     with open(CONFIG_PATH, "w") as f:
         json.dump(config, f)
     print("Config set.")
+
+
+def run_command(command, verbose=False):
+    result = subprocess.run(command,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            text=True)
+    if verbose:
+        print(result.stdout + "\n" + result.stderr)
+    return result
