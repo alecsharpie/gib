@@ -1,6 +1,6 @@
 <h1 align="center" >gib</h1>
 
-<p align="center">Accelerate your Git workflow with LLM's</p>
+<p align="center">Intelligent Git Workflows, Powered by LLMs</p>
 
 <div align="center">
 
@@ -48,22 +48,8 @@ In theory there are many models this could use. Next on the todo list is making 
 git add .
 gib commit
 ```
-
-> Fetching & Summarising recent changes...
-> Diff Summary:
-```
-  - Updated the README.md file:
-  - Changed the title to "gib" without red color.
-  - Updated the project description.
-  - Adjusted the requirements section headings.
-  - Changed GitHub CLI installation to optional.
-  - Renamed section from "Requirements" to "## Requirements".
-  - Added an "## Installation" section.
-  - Corrected an error in "gib commit" command and output.
-```
-> Generating commit message...
 > Suggested commit message:
 ```
-git commit -m "Updated README layout and content for clear instruction and pleasant reading experience."
+git commit -m "Updated README layout and content."
 Proceed with commit message? [y]es, [n]o, [e]dit:
 ```
