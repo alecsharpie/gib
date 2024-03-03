@@ -15,30 +15,32 @@ cd gib
 pip install .
 ```
 
-## Openai model setup
+## Setup
+
+### Openai
+
 ```
-export OPENAI_API_KEY='your_openai_api_key_here'
+export OPENAI_API_KEY='<openai-api-key>'
+
+gib set --model "gpt-3.5-turbo" --verbose
 ```
 
-In theory there are many models this could use. The current implementation uses openai. Next on the todo list is making it local.
+### Local
+
+In theory there are many models this could use. Next on the todo list is making it local.
 
 ## Example Usage
 ```
 gib --help
 ```
 
-```
-gib set --model "gpt-3.5-turbo" --verbose
-```
-
-```
-
 ### Generating Commit Messages
 ```
 git add .
 gib commit -v
-
+```
 > output
+```
 Fetching recent changes...
 Generating diff summary...
 Diff Summary:
